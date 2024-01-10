@@ -1,4 +1,4 @@
-#include "register.h"
+#include "system.h"
 
 //nvic enable
 void nvic_enable(uint8_t n)
@@ -51,10 +51,10 @@ void nvic_setPriority(uint8_t n, uint8_t priority)
 void flash_set_waitstates(void)
 {
     uint32_t value;
-    value = 2 | (1 << 3) | (1 << 4);
+    value = (0x0000 << LATENCY) | (1 << HLFCYA) | (1 <<PRFTBE);
     FLASH_ACR |= value;
 
-    while((FLASH_ACR & (1 << 5)) != 1);
+    while(!(FLASH_ACR & (1 << PRFTBS)));
 
     return;
 }

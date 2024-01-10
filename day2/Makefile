@@ -6,7 +6,7 @@ LD:=$(CROSS_COMPILE)gcc
 BUILD_DIR=./build
 PRJ_DIR=./
 
-OBJS:=main.o interrupt.o
+OBJS:=main.o interrupt.o clock.o system.o
 OBJECTS:=$(patsubst %.o,$(BUILD_DIR)/%.o,$(OBJS))
 DEPS:=$(OBJECTS:.o=.d)
 

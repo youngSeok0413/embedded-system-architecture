@@ -14,12 +14,6 @@ extern int main();
 
 void isr_reset(void)
 {
-    //nvic relocate
-    *((uint32_t*)SRAM_BASE) = SRAM_BASE | VECT_TAB_OFFSET;
-    
-    //flash init
-    *((uint32_t*)FLASH_ACR) =  FLASH_ACR_RESET_VALUE;
-    
     unsigned int *src, *dst, *bss;
     src = (unsigned int*)_stored_data;
     dst = (unsigned int*)_start_data;
@@ -159,9 +153,11 @@ void isr_pendsv(void)
 /**
  * system timer : if you want to use system
 */
+volatile uint32_t delay_ticks = 0;
 void isr_systick(void)
 {
-    //systick function needed
+    if(delay_ticks > 0)
+        delay_ticks--;
 }
 
 void isr_wwdg(void)
