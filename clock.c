@@ -110,7 +110,7 @@ void rcc_init(void)
 void systick_init(void)
 {
 	STK->CTRL |= 1 << 1;
-	STK->LOAD = 71;
+	STK->LOAD = 72999;	//clk_src = 72000000Hz (what we want => make systick interrupt every 1ms)
 	STK->VAL = 0;
 
 	STK->CTRL |= 1 << 0;

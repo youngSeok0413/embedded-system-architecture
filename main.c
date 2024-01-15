@@ -17,7 +17,7 @@ int main()
 	while(1)
 	{
 		ledToggle('A', 5);
-		msDelay(1000);
+		msDelay(100);
 	}
 
 	return 0;
