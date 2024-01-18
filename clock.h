@@ -15,6 +15,7 @@
 
 void rcc_init(void);
 void systick_init(void);
+uint32_t SysTick(void);
 void msDelay(uint32_t ms);
 
 #endif /* CLOCK_H_ */

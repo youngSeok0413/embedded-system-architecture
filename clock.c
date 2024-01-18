@@ -102,7 +102,6 @@ void rcc_init(void)
 	DMB();
 
 	while ((RCC->CFGR & (0b11 << 2)) != (0b10 << 2));
-
 	//HSI off
 	//RCC->CR &= ~(1 << 0);
 }
@@ -110,15 +109,21 @@ void rcc_init(void)
 void systick_init(void)
 {
 	STK->CTRL |= 1 << 1;
-	STK->LOAD = 72999;	//clk_src = 72000000Hz (what we want => make systick interrupt every 1ms)
+	STK->LOAD = 71999;		//ms
 	STK->VAL = 0;
 
 	STK->CTRL |= 1 << 0;
 }
 
+uint32_t SysTick(void)
+{
+	extern uint32_t SYS_TIM;
+	return SYS_TIM;
+}
+
 void msDelay(uint32_t ms)
 {
-	extern uint32_t STK_TIME;
-	STK_TIME = ms;
-	while (STK_TIME > 0);
+	extern uint32_t TIMER;
+	TIMER = ms;
+	while (TIMER > 0);
 }

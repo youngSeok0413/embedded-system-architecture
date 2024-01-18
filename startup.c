@@ -24,7 +24,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include <stdint.h>
+#include "register.h"
+
+#define MAX_TIM			4294967295
 
 extern unsigned int _stored_data;
 extern unsigned int _start_data;
@@ -109,11 +111,28 @@ void isr_empty(void)
     /* Ignore the event and continue */
 }
 
-uint32_t STK_TIME;
+uint32_t SYS_TIM; //just simple timer(i didn't consider overflow)
+uint32_t BIGGER_SYS_TIM;
+uint32_t TIMER;
 void isr_systick()
 {
-	if (STK_TIME > 0)
-		STK_TIME--;
+	if (TIMER > 0)
+		TIMER--;
+
+	if(SYS_TIM < MAX_TIM)
+		SYS_TIM++;
+	else
+	{
+		SYS_TIM = 0;
+		BIGGER_SYS_TIM++;
+	}
+}
+
+bool pressed;
+void isr_exti15_10()
+{
+	EXTI->PR |= 1 << 13;
+	pressed = !pressed;
 }
 
 __attribute__ ((section(".isr_vector")))
@@ -173,7 +192,7 @@ void (* const IV[])(void) =
     isr_empty,              // USART1_IRQ 37
     isr_empty,              // USART2_IRQ 38
     isr_empty,              // USART3_IRQ 39
-    isr_empty,              // EXTI15_10_IRQ 40
+    isr_exti15_10,              // EXTI15_10_IRQ 40
     isr_empty,              // RTC_ALARM_IRQ 41
     isr_empty,              // USB_FS_WKUP_IRQ 42
     isr_empty,              // TIM8_BRK_TIM12_IRQ 43

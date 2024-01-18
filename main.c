@@ -5,19 +5,25 @@
  *      Author: shipg
  */
 
+//included library
 #include "clock.h"
 #include "led.h"
+#include "gpio.h"
+#include "interrupt.h"
 
 int main()
 {
 	rcc_init();
 	systick_init();
-	ledInit();
+	gpioInit();
+	bttnInterrupt(13);
+
+	extern bool pressed;
 
 	while(1)
 	{
-		ledToggle('A', 5);
-		msDelay(100);
+		if(pressed) gpioToggle(5);
+		msDelay(10);
 	}
 
 	return 0;
