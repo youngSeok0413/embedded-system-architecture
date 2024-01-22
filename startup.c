@@ -135,6 +135,14 @@ void isr_exti15_10()
 	pressed = !pressed;
 }
 
+uint32_t TIM2_TIMER;
+void isr_tim2()
+{
+	TIM2->SR &= ~((uint32_t)1 << 0);
+	if(TIM2_TIMER > 0)
+		TIM2_TIMER--;
+}
+
 __attribute__ ((section(".isr_vector")))
 void (* const IV[])(void) =
 {
@@ -180,7 +188,7 @@ void (* const IV[])(void) =
     isr_empty,              // TIM1_UP_TIM10_IRQ 25
     isr_empty,              // TIM1_TRG_COM_TIM11_IRQ 26
     isr_empty,              // TIM1_CC_IRQ 27
-	isr_empty ,              // TIM2_IRQ 28
+	isr_tim2 ,              // TIM2_IRQ 28
     isr_empty,              // TIM3_IRQ 29
     isr_empty,              // TIM4_IRQ 30
     isr_empty,              // I2C1_EV_IRQ 31

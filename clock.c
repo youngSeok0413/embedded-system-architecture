@@ -7,6 +7,8 @@
 
 #include "clock.h"
 
+#include "interrupt.h"
+
 /*
  * By default 8 MHz internal clock is used (HSI)
  * Set up as 72 MHz (HSE-PLL)
@@ -115,6 +117,50 @@ void systick_init(void)
 	STK->CTRL |= 1 << 0;
 }
 
+void tim2_init(uint32_t clock, uint32_t prescaler, uint32_t interval_us)
+{
+	uint32_t val = 0;
+	uint32_t psc = 1;
+	uint32_t err = 0;
+	clock = ((clock * prescaler) / 1000000) * interval_us;
+
+	while (psc < 65535)
+	{
+		val = clock / psc;
+		err = clock % psc;
+		if ((val < 65535) && (err == 0))
+		{
+			val--;
+			break;
+		}
+		val = 0;
+		psc++;
+	}
+	if (val == 0)
+		return;
+
+	nvic_irq_priority(28, 1);
+	nvic_irq_enable(28);
+
+	RCC->APB1RSTR |= 1 << 0;
+	DMB();
+	RCC->APB1RSTR &= ~((uint32_t)1);
+	RCC->APB1ENR |= 1 << 0;
+
+	TIM2->CR1 = 0;
+	DMB();
+	//set timer scaler
+	TIM2->PSC = psc;
+	TIM2->ARR = val;
+
+	//clock enable
+	TIM2->CR1 |= 1 << 0;
+	TIM2->DIER |= 1 << 0;
+	DMB();
+
+	return;
+}
+
 uint32_t SysTick(void)
 {
 	extern uint32_t SYS_TIM;
@@ -126,4 +172,11 @@ void msDelay(uint32_t ms)
 	extern uint32_t TIMER;
 	TIMER = ms;
 	while (TIMER > 0);
+}
+
+void usDelay(uint32_t us)
+{
+	extern uint32_t TIM2_TIMER;
+	TIM2_TIMER = us;
+	while(TIM2_TIMER > 0) ;
 }

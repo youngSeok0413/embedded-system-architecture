@@ -15,6 +15,7 @@ int main()
 {
 	rcc_init();
 	systick_init();
+	tim2_init(72000000, 1024 , 1);
 	gpioInit();
 	bttnInterrupt(13);
 
@@ -22,8 +23,10 @@ int main()
 
 	while(1)
 	{
-		if(pressed) gpioToggle(5);
-		msDelay(10);
+		gpioToggle(5);
+		usDelay(100000);
+		gpioToggle(5);
+		msDelay(100);
 	}
 
 	return 0;

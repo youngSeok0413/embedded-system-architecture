@@ -29,6 +29,7 @@
 #define EXTI_BASE				(APB2PERIPH_BASE + 0x0400)
 #define RCC_BASE				(AHBPERIPH_BASE + 0x1000)
 #define FLASH_BASE				(AHBPERIPH_BASE + 0x2000)
+#define TIM2_BASE				(APB1PERIPH_BASE + 0x0000)
 
 
 /*
@@ -124,6 +125,30 @@ typedef struct
 	uint32_t MAPR2;
 } AFIO_type;
 
+typedef struct
+{
+	uint32_t CR1;
+	uint32_t CR2;
+	uint32_t SMCR;
+	uint32_t DIER;
+	uint32_t SR;
+	uint32_t EGR;
+	uint32_t CCMR1;
+	uint32_t CCMR2;
+	uint32_t CCER;
+	uint32_t CNT;
+	uint32_t PSC;
+	uint32_t ARR;
+	uint32_t reserved_1;
+	uint32_t CCR1;
+	uint32_t CCR2;
+	uint32_t CCR3;
+	uint32_t CCR4;
+	uint32_t reserved_2;
+	uint32_t DCR;
+	uint32_t DMAR;
+} TIM_type;
+
 /**
  * Memory address
  * */
@@ -142,5 +167,5 @@ typedef struct
 #define STK				((volatile STK_type *) SYSTICK_BASE)
 #define EXTI			((volatile EXTI_type *)   EXTI_BASE)
 #define NVIC			((volatile NVIC_type *)   NVIC_BASE)
-
+#define TIM2			((volatile TIM_type *) TIM2_BASE)
 #endif /* REGISTER_H_ */
