@@ -15,18 +15,14 @@ int main()
 {
 	rcc_init();
 	systick_init();
-	tim2_init(72000000, 1024 , 1);
+	tim2_init();
 	gpioInit();
 	bttnInterrupt(13);
-
-	extern bool pressed;
 
 	while(1)
 	{
 		gpioToggle(5);
 		usDelay(100000);
-		gpioToggle(5);
-		msDelay(100);
 	}
 
 	return 0;
