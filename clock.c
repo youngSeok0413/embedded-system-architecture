@@ -89,7 +89,7 @@ void rcc_init(void)
 	//PLL mul
 	reg32 = RCC->CFGR;
 	reg32 &= ~(0b1111 << 18);
-	RCC->CFGR = reg32 | (0b1111 << 18);
+	RCC->CFGR = reg32 | (0b0111 << 18);
 	DMB();
 
 	//PLL sysclk source on
